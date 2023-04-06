@@ -39,11 +39,12 @@ int main(int argc, char* argv[])
 
         cout << "Your board:" << endl;
         players[0]->display(cout);
+
         cout << std::setw(MAP_WIDTH * 2 + 2) << std::setfill('-') << "" << endl << endl;
         cout << "Computer's board:" << endl;
         players[1]->display(cout);
 
-        if (player->hit() == State::Miss) {
+        if (player->hit() == State::Miss && !player->getError()) {
             current_player = (current_player + 1) % 2;
         }
     }

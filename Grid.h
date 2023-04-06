@@ -60,7 +60,6 @@ namespace nure {
         const State& getState(Location location) const;
         const Error& getError() const;
     };
-
 }  // namespace nure
 
 #endif

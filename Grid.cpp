@@ -354,6 +354,8 @@ namespace nure {
 
     Grid& Grid::hit(Location tmp_location)
     {
+        error.clear();
+
         if (tmp_location) {
             int ship_index = -1;
             bool is_sunk = true;

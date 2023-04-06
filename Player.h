@@ -11,6 +11,7 @@ namespace nure {
 
     public:
         virtual bool is_lost() const;
+        virtual Error getError() const;
 
         virtual State hit() = 0;
         virtual std::ostream& display(std::ostream& os) const = 0;
