@@ -3,8 +3,7 @@
 #include <chrono>
 #include <thread>
 
-#include "Grid.h"
-#include "EnemyGrid.h"
+#include "Player.h"
 
 using namespace std;
 using namespace nure;
@@ -29,51 +28,27 @@ int main(int argc, char* argv[])
 {
     srand(time(nullptr));
 
-    Grid my_grid;
-    EnemyGrid enemy_grid;
+    Player* players[] = {new UserPlayer(), new ComputerPlayer()};
+    int current_player = 1;
 
-    my_grid.generateRandomMap();
-    enemy_grid.generateRandomMap();
+    while (!players[0]->is_lost() && !players[1]->is_lost()) {
+        Player* player = players[current_player];
 
-    bool my_turn = true;
-
-    while (!my_grid.isGameOver() && !enemy_grid.isGameOver()) {
         clearConsole();
         displayDocs(cout);
-        cout << "Your board:" << endl << my_grid << endl;
+
+        cout << "Your board:" << endl;
+        players[0]->display(cout);
         cout << std::setw(MAP_WIDTH * 2 + 2) << std::setfill('-') << "" << endl << endl;
-        cout << "Computer's board:" << endl << enemy_grid << endl;
+        cout << "Computer's board:" << endl;
+        players[1]->display(cout);
 
-        if (my_turn) {
-            Location hit_location;
-            cin >> hit_location;
-
-            State state = enemy_grid.getState(hit_location);
-            if (state != State::Hit && state != State::Miss && state != State::Dead) {
-                enemy_grid.hit(hit_location);
-
-                State new_state = enemy_grid.getState(hit_location);
-                if (new_state == State::Miss) {
-                    my_turn = false;
-                }
-            }
-        } else {
-            Location hit_location = my_grid.calculateHitLocation();
-
-            State state = my_grid.getState(hit_location);
-
-            if (state != State::Hit && state != State::Miss && state != State::Dead) {
-                my_grid.hit(hit_location);
-
-                State new_state = my_grid.getState(hit_location);
-                if (new_state == State::Miss) {
-                    my_turn = true;
-                }
-            }
+        if (player->hit() == State::Miss) {
+            current_player = (current_player + 1) % 2;
         }
     }
 
-    cout << (my_grid.isGameOver() ? "Computer Won!" : "You Won!") << endl;
+    cout << (players[0]->is_lost() ? "Computer Won!" : "You Won!") << endl;
 
     return 0;
 }

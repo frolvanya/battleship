@@ -327,9 +327,6 @@ namespace nure {
                                 for (Location neighbour : neighbours) {
                                     if (neighbour && grid[neighbour.y][neighbour.x] == State::Hit) {
                                         probability[i][j] += 1000;
-                                    } else if (neighbour &&
-                                               grid[neighbour.y][neighbour.x] == State::Miss) {
-                                        probability[i][j] -= 10;
                                     }
                                 }
                             }
@@ -411,44 +408,6 @@ namespace nure {
     bool Grid::isGameOver() const { return ships.size() == 0; }
 
     const State& Grid::getState(Location location) const { return grid[location.y][location.x]; }
+    const Error& Grid::getError() const { return error; }
 
-    ostream& Grid::display(ostream& os) const
-    {
-        if (error) {
-            os << error << endl;
-        } else {
-            os << "   A B C D E F G H I J" << endl;
-            for (int i = 0; i < MAP_HEIGHT; i++) {
-                os << std::setw(2) << std::setfill(' ') << i + 1 << " ";
-                for (int j = 0; j < MAP_WIDTH; j++) {
-                    switch (grid[i][j]) {
-                        case State::Empty:
-                            os << ANSI_COLOR_WHITE << "* " << ANSI_COLOR_RESET;
-                            break;
-                        case State::Occupied:
-                            os << ANSI_COLOR_GREEN << "S " << ANSI_COLOR_RESET;
-                            break;
-                        case State::Hit:
-                            os << ANSI_COLOR_RED << "X " << ANSI_COLOR_RESET;
-                            break;
-                        case State::Dead:
-                            os << ANSI_COLOR_BLUE << "X " << ANSI_COLOR_RESET;
-                            break;
-                        case State::Miss:
-                            os << ANSI_COLOR_PURPLE << "M " << ANSI_COLOR_RESET;
-                            break;
-                        default:
-                            os << grid[i][j] << " ";
-                            break;
-                    }
-                }
-
-                os << endl;
-            }
-        }
-
-        return os;
-    }
-
-    ostream& operator<<(ostream& os, const Grid& rhs) { return rhs.display(os); }
 }  // namespace nure

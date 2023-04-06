@@ -54,15 +54,13 @@ namespace nure {
         Location calculateHitLocation();
 
         bool addShip(Ship& ship);
-        virtual Grid& hit(Location tmp_location);
+        Grid& hit(Location tmp_location);
         bool isGameOver() const;
 
-        virtual const State& getState(Location location) const;
-
-        virtual std::ostream& display(std::ostream& os) const;
+        const State& getState(Location location) const;
+        const Error& getError() const;
     };
 
-    std::ostream& operator<<(std::ostream& os, const Grid& rhs);
 }  // namespace nure
 
 #endif
